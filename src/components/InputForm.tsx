@@ -1,0 +1,53 @@
+import React, { useState } from "react";
+import Form from "react-bootstrap/Form";
+import FormLabel from "react-bootstrap/FormLabel";
+import "../style/treeForm.css";
+import Col from "react-bootstrap/Col";
+
+const InputForm = (props: any) => {
+  let { tree } = props;
+  let [enabled, setEnabled] = useState(false);
+
+  const handleInput = (event: any) => {
+    event.preventDefault();
+    tree.insert(event.target.input.value.toLowerCase());
+    event.target.input.value = "";
+    props.update(tree.toGraph());
+    setEnabled(false);
+  };
+
+  const handleChange = (event: any) => {
+    event.preventDefault();
+    let value = event.target.value.toLowerCase();
+    setEnabled(value.length !== 0);
+  };
+
+  return (
+    <div className={"pt-5"}>
+      <Form onSubmit={(e) => handleInput(e)}>
+        <FormLabel htmlFor={"input"}>Enter word or number</FormLabel>
+        <Form.Row>
+          <Col>
+            <input
+              className={"form-control"}
+              type={"text"}
+              id="input"
+              placeholder={"ex. 10 or desk"}
+              onChange={handleChange}
+            />
+          </Col>
+          <Col>
+            <input
+              type={"submit"}
+              className={"btn btn-primary add-btn"}
+              value={"add"}
+              disabled={!enabled}
+            />
+          </Col>
+        </Form.Row>
+      </Form>
+    </div>
+  );
+};
+
+export { InputForm };
